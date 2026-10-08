@@ -1,8 +1,8 @@
-# 加密市场波动率数据项目
+# 加密货币市场风险分析
 
 [English](README.md) | 简体中文
 
-这是一个完整的数据工程与分析作品集项目。项目从 Binance.US 获取 BTC/USDT 和 BNB/USDT 的 30 分钟 OHLCV 数据，使用 Parquet 保存中间数据，在 MySQL 中建立星型模型，并通过 Python 和 Tableau 分析价格、成交量、收益率与波动率。
+这是一个面向风险分析、商业分析和金融科技岗位的作品集项目。项目从 Binance.US 获取 BTC/USDT 和 BNB/USDT 的 30 分钟 OHLCV 数据，使用 Parquet 保存中间数据，在 MySQL 中建立星型模型，并通过 Python 和 Tableau 分析收益率、波动率、风险收益关系与市场时间规律。
 
 > 本项目仅用于学习和作品展示，不构成投资建议。
 
