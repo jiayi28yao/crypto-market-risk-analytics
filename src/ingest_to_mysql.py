@@ -16,6 +16,32 @@ load_dotenv()
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = PROJECT_ROOT / "data" / "processed"
 
+REQUIRED_COLUMNS = {
+    "open_time",
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume",
+    "quote_asset_volume",
+    "num_trades",
+    "taker_buy_base",
+    "taker_buy_quote",
+    "symbol",
+}
+
+NUMERIC_COLUMNS = [
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume",
+    "quote_asset_volume",
+    "num_trades",
+    "taker_buy_base",
+    "taker_buy_quote",
+]
+
 
 def database_url() -> str:
     user = quote_plus(os.getenv("MYSQL_USER", "root"))
@@ -40,8 +66,34 @@ def load_file(engine, parquet_path: Path) -> None:
     if frame.empty:
         return
 
+    missing_columns = REQUIRED_COLUMNS.difference(frame.columns)
+    if missing_columns:
+        raise ValueError(
+            f"{parquet_path.name} is missing columns: {sorted(missing_columns)}"
+        )
+    if frame[list(REQUIRED_COLUMNS)].isna().any().any():
+        raise ValueError(f"{parquet_path.name} contains missing required values")
+    if frame.duplicated(subset=["symbol", "open_time"]).any():
+        raise ValueError(f"{parquet_path.name} contains duplicate symbol/timestamp rows")
+
     frame["open_time"] = pd.to_datetime(frame["open_time"])
-    frame = frame.drop_duplicates(subset=["symbol", "open_time"]).copy()
+    frame[NUMERIC_COLUMNS] = frame[NUMERIC_COLUMNS].apply(pd.to_numeric, errors="raise")
+    frame = frame.copy()
+    symbols = frame["symbol"].astype(str).str.upper().unique()
+    if len(symbols) != 1:
+        raise ValueError(f"{parquet_path.name} must contain exactly one symbol")
+    if frame[NUMERIC_COLUMNS].isna().any().any():
+        raise ValueError(f"{parquet_path.name} contains missing numeric values")
+    if (frame[NUMERIC_COLUMNS] < 0).any().any():
+        raise ValueError(f"{parquet_path.name} contains negative market values")
+
+    invalid_ohlc = (
+        (frame["high"] < frame[["open", "close", "low"]].max(axis=1))
+        | (frame["low"] > frame[["open", "close", "high"]].min(axis=1))
+    )
+    if invalid_ohlc.any():
+        raise ValueError(f"{parquet_path.name} contains invalid OHLC relationships")
+
     symbol = str(frame["symbol"].iloc[0]).upper()
     base_asset, quote_asset = symbol[:-4], symbol[-4:]
     interval = parquet_path.stem.rsplit("_", 1)[-1]
@@ -168,4 +220,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

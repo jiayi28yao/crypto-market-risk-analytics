@@ -614,19 +614,19 @@
         </metadata-records>
       </connection>
       <aliases enabled='yes' />
-      <column caption='Daily Return' datatype='real' name='[Calculation_190347467516555288]' role='measure' type='quantitative'>
+      <column caption='Intraday Return' datatype='real' name='[Calculation_190347467516555288]' role='measure' type='quantitative'>
         <calculation class='tableau' formula='([close] - [open]) / [open]' />
       </column>
-      <column caption='Monthly Volatility' datatype='real' name='[Calculation_190347467784212506]' role='measure' type='quantitative'>
+      <column caption='Monthly Return Volatility' datatype='real' name='[Calculation_190347467784212506]' role='measure' type='quantitative'>
         <calculation class='tableau' formula='STDEV([Calculation_190347467516555288])' />
       </column>
-      <column caption='Weekday Volatility' datatype='real' name='[Calculation_190347467792990236]' role='measure' type='quantitative'>
+      <column caption='Weekday Return Volatility' datatype='real' name='[Calculation_190347467792990236]' role='measure' type='quantitative'>
         <calculation class='tableau' formula='STDEV([Calculation_190347467516555288])' />
       </column>
       <column caption='Hourly Return' datatype='real' name='[Calculation_190347467809095709]' role='measure' type='quantitative'>
         <calculation class='tableau' formula='([close] - LOOKUP([close], -1)) / LOOKUP([close], -1)' />
       </column>
-      <column caption='Volatility' datatype='real' name='[Calculation_6413266621099536384]' role='measure' type='quantitative'>
+      <column caption='Daily Range' datatype='real' name='[Calculation_6413266621099536384]' role='measure' type='quantitative'>
         <calculation class='tableau' formula='([high] - [low]) / [open]' />
       </column>
       <column caption='dim_date' datatype='table' name='[__tableau_internal_object_id__].[dim_date_E74E3384657A4A2DBC4448AC18D0C798]' role='measure' type='quantitative' />
@@ -760,7 +760,7 @@
       <layout-options>
         <title>
           <formatted-text>
-            <run fontcolor='#000000' fontname='Benton Sans Book'>Daily Closing Price Trend (BTC vs BNB)</run>
+            <run fontcolor='#000000' fontname='Benton Sans Book'>Daily Closing Price Levels (log scale)</run>
           </formatted-text>
         </title>
       </layout-options>
@@ -782,7 +782,7 @@
         <style>
           <style-rule element='axis'>
             <format attr='width' field='[federated.1twmwpy1vj9149163865i139et15].[sum:close:qk]' value='68' />
-            <encoding attr='space' class='1' field='[federated.1twmwpy1vj9149163865i139et15].[sum:close:qk]' field-type='quantitative' fold='true' scope='rows' synchronized='true' type='space' />
+            <encoding attr='space' class='1' field='[federated.1twmwpy1vj9149163865i139et15].[sum:close:qk]' field-type='quantitative' fold='true' scale='log' scope='rows' synchronized='true' type='space' />
             <format attr='title' class='0' field='[federated.1twmwpy1vj9149163865i139et15].[none:d:qk]' scope='cols' value='Date' />
           </style-rule>
         </style>
@@ -865,10 +865,10 @@
             <datasource caption='fact_ohlcv_daily (crypto_db)' name='federated.1twmwpy1vj9149163865i139et15' />
           </datasources>
           <datasource-dependencies datasource='federated.1twmwpy1vj9149163865i139et15'>
-            <column caption='Daily Return' datatype='real' name='[Calculation_190347467516555288]' role='measure' type='quantitative'>
+            <column caption='Intraday Return' datatype='real' name='[Calculation_190347467516555288]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='([close] - [open]) / [open]' />
             </column>
-            <column caption='Monthly Volatility' datatype='real' name='[Calculation_190347467784212506]' role='measure' type='quantitative'>
+            <column caption='Monthly Return Volatility' datatype='real' name='[Calculation_190347467784212506]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='STDEV([Calculation_190347467516555288])' />
             </column>
             <column-instance column='[Calculation_190347467516555288]' derivation='Avg' name='[avg:Calculation_190347467516555288:qk]' pivot='key' type='quantitative' />
@@ -914,7 +914,7 @@
             <datasource caption='fact_ohlcv_daily (crypto_db)' name='federated.1twmwpy1vj9149163865i139et15' />
           </datasources>
           <datasource-dependencies datasource='federated.1twmwpy1vj9149163865i139et15'>
-            <column caption='Daily Return' datatype='real' name='[Calculation_190347467516555288]' role='measure' type='quantitative'>
+            <column caption='Intraday Return' datatype='real' name='[Calculation_190347467516555288]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='([close] - [open]) / [open]' />
             </column>
             <column-instance column='[Calculation_190347467516555288]' derivation='Avg' name='[avg:Calculation_190347467516555288:qk]' pivot='key' type='quantitative' />
@@ -951,10 +951,10 @@
             <datasource caption='fact_ohlcv_daily (crypto_db)' name='federated.1twmwpy1vj9149163865i139et15' />
           </datasources>
           <datasource-dependencies datasource='federated.1twmwpy1vj9149163865i139et15'>
-            <column caption='Daily Return' datatype='real' name='[Calculation_190347467516555288]' role='measure' type='quantitative'>
+            <column caption='Intraday Return' datatype='real' name='[Calculation_190347467516555288]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='([close] - [open]) / [open]' />
             </column>
-            <column caption='Volatility' datatype='real' name='[Calculation_6413266621099536384]' role='measure' type='quantitative'>
+            <column caption='Daily Range' datatype='real' name='[Calculation_6413266621099536384]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='([high] - [low]) / [open]' />
             </column>
             <column-instance column='[Calculation_190347467516555288]' derivation='Avg' name='[avg:Calculation_190347467516555288:qk]' pivot='key' type='quantitative' />
@@ -1002,7 +1002,7 @@
             <datasource caption='fact_ohlcv_daily (crypto_db)' name='federated.1twmwpy1vj9149163865i139et15' />
           </datasources>
           <datasource-dependencies datasource='federated.1twmwpy1vj9149163865i139et15'>
-            <column caption='Volatility' datatype='real' name='[Calculation_6413266621099536384]' role='measure' type='quantitative'>
+            <column caption='Daily Range' datatype='real' name='[Calculation_6413266621099536384]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='([high] - [low]) / [open]' />
             </column>
             <column-instance column='[Calculation_6413266621099536384]' derivation='Avg' name='[avg:Calculation_6413266621099536384:qk]' pivot='key' type='quantitative' />
@@ -1057,10 +1057,10 @@
             <datasource caption='fact_ohlcv_daily (crypto_db)' name='federated.1twmwpy1vj9149163865i139et15' />
           </datasources>
           <datasource-dependencies datasource='federated.1twmwpy1vj9149163865i139et15'>
-            <column caption='Daily Return' datatype='real' name='[Calculation_190347467516555288]' role='measure' type='quantitative'>
+            <column caption='Intraday Return' datatype='real' name='[Calculation_190347467516555288]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='([close] - [open]) / [open]' />
             </column>
-            <column caption='Weekday Volatility' datatype='real' name='[Calculation_190347467792990236]' role='measure' type='quantitative'>
+            <column caption='Weekday Return Volatility' datatype='real' name='[Calculation_190347467792990236]' role='measure' type='quantitative'>
               <calculation class='tableau' formula='STDEV([Calculation_190347467516555288])' />
             </column>
             <column-instance column='[Calculation_190347467516555288]' derivation='Avg' name='[avg:Calculation_190347467516555288:qk]' pivot='key' type='quantitative' />
@@ -1130,9 +1130,9 @@
         <zone h='30374' id='9' name='Daily Volume Trend' w='81106' x='1843' y='40642' />
         <zone forceUpdate='true' h='11444' id='12' type-v2='text' w='73157' x='8756' y='1818'>
           <formatted-text>
-            <run bold='true' fontalignment='1' fontsize='18'>Crypto Market Insights — BTC vs BNB</run>
+            <run bold='true' fontalignment='1' fontsize='18'>Crypto Market Risk Analytics: BTC and BNB</run>
             <run fontalignment='1'>Æ&#10;</run>
-            <run bold='true' fontalignment='1' fontsize='18'>Daily Trend • Market Activity</run>
+            <run bold='true' fontalignment='1' fontsize='18'>Daily Price Levels and Market Activity</run>
           </formatted-text>
         </zone>
       </zones>
@@ -1144,9 +1144,9 @@
               <zone h='97994' id='21' param='vert' type-v2='layout-flow' w='98428' x='786' y='1003'>
                 <zone forceUpdate='true' h='11444' id='12' type-v2='text' w='73157' x='8756' y='1818'>
                   <formatted-text>
-                    <run bold='true' fontalignment='1' fontsize='18'>Crypto Market Insights — BTC vs BNB</run>
+                    <run bold='true' fontalignment='1' fontsize='18'>Crypto Market Risk Analytics: BTC and BNB</run>
                     <run fontalignment='1'>Æ&#10;</run>
-                    <run bold='true' fontalignment='1' fontsize='18'>Daily Trend • Market Activity</run>
+                    <run bold='true' fontalignment='1' fontsize='18'>Daily Price Levels and Market Activity</run>
                   </formatted-text>
                   <zone-style>
                     <format attr='border-color' value='#000000' />

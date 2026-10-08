@@ -6,4 +6,4 @@ PyMySQL>=1.1,<2
 python-dotenv>=1.0,<2
 requests>=2.31,<3
 SQLAlchemy>=2.0,<3
-
+jupyterlab>=4,<5

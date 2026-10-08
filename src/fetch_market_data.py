@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import time
+from datetime import timedelta
 from pathlib import Path
 
 import pandas as pd
@@ -51,6 +52,46 @@ NUMERIC_COLUMNS = [
 ]
 
 
+def validate_frame(frame: pd.DataFrame, symbol: str) -> list[str]:
+    """Validate one downloaded series and return non-fatal continuity warnings."""
+    if frame.empty:
+        raise ValueError(f"No rows returned for {symbol}")
+    if frame["open_time"].duplicated().any():
+        raise ValueError(f"Duplicate candle timestamps found for {symbol}")
+    if frame[COLUMNS[:-1]].isna().any().any():
+        raise ValueError(f"Missing required values found for {symbol}")
+
+    invalid_ohlc = (
+        (frame["high"] < frame[["open", "close", "low"]].max(axis=1))
+        | (frame["low"] > frame[["open", "close", "high"]].min(axis=1))
+    )
+    if invalid_ohlc.any():
+        raise ValueError(f"Invalid OHLC relationships found for {symbol}")
+    if (frame[NUMERIC_COLUMNS] < 0).any().any():
+        raise ValueError(f"Negative market values found for {symbol}")
+
+    warnings: list[str] = []
+    interval_units = {
+        "m": lambda value: timedelta(minutes=value),
+        "h": lambda value: timedelta(hours=value),
+        "d": lambda value: timedelta(days=value),
+        "w": lambda value: timedelta(weeks=value),
+    }
+    suffix = INTERVAL[-1]
+    if suffix not in interval_units or not INTERVAL[:-1].isdigit():
+        raise ValueError(f"Unsupported interval for continuity checks: {INTERVAL}")
+    expected_step = interval_units[suffix](int(INTERVAL[:-1]))
+    gaps = frame["open_time"].sort_values().diff()
+    for index in gaps[gaps > expected_step].index:
+        end = frame.loc[index, "open_time"]
+        start = end - gaps.loc[index]
+        missing = int(gaps.loc[index] / expected_step) - 1
+        warnings.append(
+            f"{symbol}: {missing} missing candles between {start} and {end}"
+        )
+    return warnings
+
+
 def to_milliseconds(value: str) -> int:
     return int(pd.Timestamp(value, tz="UTC").timestamp() * 1000)
 
@@ -91,7 +132,10 @@ def fetch_klines(symbol: str) -> pd.DataFrame:
     frame["close_time"] = pd.to_datetime(frame["close_time"], unit="ms", utc=True).dt.tz_localize(None)
     frame[NUMERIC_COLUMNS] = frame[NUMERIC_COLUMNS].apply(pd.to_numeric)
     frame["symbol"] = symbol.lower()
-    return frame.drop_duplicates(subset=["symbol", "open_time"]).sort_values("open_time")
+    frame = frame.sort_values("open_time").reset_index(drop=True)
+    for warning in validate_frame(frame, symbol):
+        print(f"WARNING: {warning}")
+    return frame
 
 
 def main() -> None:
@@ -105,4 +149,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

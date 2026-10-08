@@ -5,4 +5,6 @@ __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
 *.log
-
+.pytest_cache/
+.codex-ppt-edit/
+.codex-finalizer/
