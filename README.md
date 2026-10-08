@@ -1,5 +1,7 @@
 # Crypto Market Volatility Pipeline
 
+English | [简体中文](README.zh-CN.md)
+
 An end-to-end data engineering and analytics project for BTC/USDT and BNB/USDT market data. The project collects 30-minute OHLCV candles from Binance.US, stores analytical files in Parquet, loads a MySQL star schema, explores market behavior in Python, and presents the results in Tableau.
 
 > Educational portfolio project. The analysis is not investment advice.
@@ -97,4 +99,3 @@ CryptoKoi
 - [MySQL generated columns](https://dev.mysql.com/doc/refman/8.0/en/create-table-generated-columns.html)
 - [Apache Parquet](https://parquet.apache.org/)
 - [Tableau MySQL connector](https://help.tableau.com/current/pro/desktop/en-us/examples_mysql.htm)
-
