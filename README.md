@@ -1,8 +1,8 @@
-# Crypto Market Volatility Pipeline
+# Crypto Market Risk Analytics
 
 English | [简体中文](README.zh-CN.md)
 
-An end-to-end data engineering and analytics project for BTC/USDT and BNB/USDT market data. The project collects 30-minute OHLCV candles from Binance.US, stores analytical files in Parquet, loads a MySQL star schema, explores market behavior in Python, and presents the results in Tableau.
+An end-to-end financial risk analytics project for BTC/USDT and BNB/USDT market data. The project combines market-risk analysis with a reproducible data pipeline: it collects 30-minute OHLCV candles from Binance.US, stores analytical files in Parquet, loads a MySQL star schema, evaluates returns and volatility in Python, and presents decision-oriented insights in Tableau.
 
 > Educational portfolio project. The analysis is not investment advice.
 
